@@ -119,6 +119,7 @@ public class Crawler extends DefaultConfigured {
         }
 
         status = RUNNING;
+        int totalUrl = 0;
         for (int i = 0; i < depth; i++) {
             if (status == STOPED) {
                 break;
@@ -134,7 +135,7 @@ public class Crawler extends DefaultConfigured {
             fetcher.setNextFilter(nextFilter);
             fetcher.setThreads(threads);
             int totalGenerate = fetcher.fetchAll(generatorFilter);
-
+            totalUrl += totalGenerate;
             long endTime = System.currentTimeMillis();
             long costTime = (endTime - startTime) / 1000;
 
@@ -145,10 +146,10 @@ public class Crawler extends DefaultConfigured {
 
         }
         dbManager.close();
-        afterStop();
+        afterStop(totalUrl);
     }
 
-    public void afterStop(){
+    public void afterStop(int totalUrl){
 
     }
 
