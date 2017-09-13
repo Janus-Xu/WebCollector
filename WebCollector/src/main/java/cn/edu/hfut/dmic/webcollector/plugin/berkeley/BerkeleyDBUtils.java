@@ -38,7 +38,7 @@ public class BerkeleyDBUtils {
     public static DatabaseConfig  createDefaultDBConfig(){
         DatabaseConfig databaseConfig=new DatabaseConfig();
         databaseConfig.setAllowCreate(true);
-//        databaseConfig.setDeferredWrite(true);
+        databaseConfig.setDeferredWrite(true);
         return databaseConfig;
     }
     
@@ -46,6 +46,8 @@ public class BerkeleyDBUtils {
         String key=datum.key();
         String value=CrawlDatumFormater.datumToJsonStr(datum);
         put(database,key,value);
+        //添加BerkeleyDB数据同步,避免爬虫异常停止后丢失缓存数据,断点续爬失去实际意义
+        database.sync();
     }
     
     public static void put(Database database,String key,String value) throws Exception{
